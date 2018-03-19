@@ -20,9 +20,10 @@ namespace CoolestLibraryTests
             var k = new MyTestKernel();
             var attrTypes = new List<Type> { typeof(DulcetTonesAttribute) };
             Type funcType = typeof(Func<int, Actor>);
+            var dummyParamInfo = typeof(DummyClass).GetConstructors().First().GetParameters().First();
 
             // act
-            Type dynamicType = MyTypeBuilder.MakeDynamicType(funcType, attrTypes);
+            Type dynamicType = MyTypeBuilder.MakeDynamicType(funcType, attrTypes, dummyParamInfo);
             k.Bind(dynamicType).ToSelf();
             var wrapperInstance = k.Get(dynamicType);
             var funcInstance = FuncValueGetter.GetFuncValue(wrapperInstance, dynamicType);
@@ -35,22 +36,27 @@ namespace CoolestLibraryTests
         }
 
 
-        //[Test]
-        //public void CanSetFuncAsGettableProperty()
-        //{
-        //    // assemble
-        //    var k = new MyTestKernel();
+        [Test]
+        public void MakeDynamicType_PassInParameterInfo_AttachesAttributesToWrapperParameter()
+        {
+            // assemble
+            var k = new MyTestKernel();
+            var attrTypes = new List<Type> { typeof(DulcetTonesAttribute) };
+            Type funcType = typeof(Func<int, Actor>);
+            var paramInfo = typeof(DummyClass).GetConstructors().First().GetParameters().First(); // has "Thespian" attr on it
 
-        //    var attrTypes = new List<Type> { typeof(DulcetTonesAttribute) };
-        //    Type funcType = typeof(Func<string, Actor>);
-        //    Type dynamicType = MyTypeBuilder.MakeDynamicType(funcType, attrTypes);
+            // act
+            Type dynamicType = MyTypeBuilder.MakeDynamicType(funcType, attrTypes, paramInfo);
+            var ctorParamAttrs = dynamicType.GetConstructors().First().GetParameters().First().GetCustomAttribute<ThespianAttribute>();
 
-        //    // act
-        //    var instance = Activator.CreateInstance(dynamicType);
-        //    var value = FuncValueGetter.GetFuncValue(instance, dynamicType);
+            // assert
+            Assert.IsNotNull(ctorParamAttrs);
+        }
+    }
 
-        //    // assert
-        //    Assert.IsNotNull(value);
-        //}
+    public class DummyClass
+    {
+        public DummyClass([Thespian]int dummyParam)
+        {}
     }
 }

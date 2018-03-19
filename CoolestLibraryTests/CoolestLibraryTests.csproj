@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbcKernelTests.cs" />
     <Compile Include="DynamicTypeBuilderTests.cs" />
     <Compile Include="KernelTests.cs" />
     <Compile Include="MyTestKernel.cs" />

@@ -6,7 +6,7 @@ namespace CoolestLibrary
     {
         private readonly int _loveOfShakespeare;
 
-        public Actor(int loveOfShakespeare)
+        public Actor([DulcetTones]int loveOfShakespeare)
         {
             _loveOfShakespeare = loveOfShakespeare;
         }

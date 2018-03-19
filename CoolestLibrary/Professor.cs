@@ -4,7 +4,7 @@ namespace CoolestLibrary
 {
     public class Professor : ITeacher
     {
-        public Professor(string name)
+        public Professor([Thespian]string name)
         {
             Name = name;
         }
